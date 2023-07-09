@@ -1,0 +1,32 @@
+
+service: bankPWA-api
+
+frameworkVersion: '3'
+
+custom:
+  wsgi:
+    app: run.app
+  
+  belvo_secret_password: WTfa8gGXey@#PYT@Lm*1P8Be@O*@jrbK5*Hn2SijlC1rYwrcYRYjoNh3QaWc*u7e
+  belvo_secret_id: 99f8a11a-3d3a-4de2-b3a2-036a40c5e6e9
+  secret_key: 3a7d5e82fd56a6b77ef9720a93284966
+
+
+provider:
+  name: aws
+  runtime: python3.10
+  environment:
+    BELVO_SECRET_ID_PROD: ${self:custom.belvo_secret_id}
+    BELVO_SECRET_PASSWORD_PROD: ${self:custom.belvo_secret_password}
+    SECRET_KEY: ${self:custom.secret_key}
+  
+
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+      - httpApi: '*'
+
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
